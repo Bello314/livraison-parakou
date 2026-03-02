@@ -10,12 +10,16 @@
 <style>
 body {margin:0;font-family:Arial;background:#f2f2f2;}
 header {background:linear-gradient(135deg,#008000,#00c853);color:white;padding:40px;text-align:center;}
+header h1 {margin:0;}
 .section {padding:25px;text-align:center;}
 .card {background:white;padding:20px;margin:15px auto;border-radius:12px;max-width:420px;box-shadow:0 6px 15px rgba(0,0,0,0.1);}
+.price {font-size:22px;color:#008000;font-weight:bold;}
 .btn {display:inline-block;padding:10px 18px;margin-top:10px;background:#25D366;color:white;text-decoration:none;border-radius:8px;}
 .floating-btn{position:fixed;bottom:20px;right:20px;background:#25D366;color:white;padding:14px;border-radius:50%;font-size:22px;text-decoration:none;}
+.install-btn{background:#000;margin-top:15px;color:white;}
 .admin-panel {display:none;padding:20px;background:#111;color:white;}
 input {padding:8px;margin:5px;border-radius:6px;border:1px solid #ccc;}
+.review {background:white;padding:15px;margin:10px auto;border-radius:10px;max-width:400px;box-shadow:0 4px 10px rgba(0,0,0,0.1);}
 </style>
 </head>
 
@@ -24,23 +28,42 @@ input {padding:8px;margin:5px;border-radius:6px;border:1px solid #ccc;}
 <header>
 <h1>🚀 Livraison Express Parakou</h1>
 <p>Mini App Startup 4.0</p>
+<button id="installBtn" class="btn install-btn" style="display:none;">Installer l'application</button>
 </header>
 
 <div class="section">
-<div class="card">
-<h3>Commander une livraison</h3>
-<input id="clientName" placeholder="Votre nom"><br>
-<input id="clientOrder" placeholder="Votre commande"><br>
-<button class="btn" onclick="saveOrder()">Envoyer commande</button>
+<h2>📦 Nos Services</h2>
+<div class="card">🍛 Livraison de repas</div>
+<div class="card">🛒 Courses & achats</div>
+<div class="card">📦 Colis & documents</div>
+<div class="card">💊 Médicaments</div>
+<a class="btn" href="https://wa.me/22960772016?text=Bonjour%20je%20veux%20commander">Commander maintenant</a>
 </div>
 
+<div class="section" style="background:#e8f5e9;">
+<h2>🎓 Abonnement Étudiant</h2>
 <div class="card">
-<h3>🎓 Abonnement Étudiant</h3>
-<p>Pack Basic – 4 000 FCFA</p>
-<p>Pack Premium – 8 000 FCFA</p>
-<a class="btn" href="https://wa.me/22960772016?text=Je%20veux%20m'abonner">S'abonner</a>
+<h3>Pack Basic</h3>
+<p class="price">4 000 FCFA / mois</p>
+<p>10 livraisons incluses</p>
+<a class="btn" href="https://wa.me/22960772016?text=Je%20veux%20le%20Pack%20Basic">S'abonner</a>
+</div>
+<div class="card">
+<h3>Pack Premium</h3>
+<p class="price">8 000 FCFA / mois</p>
+<p>25 livraisons incluses + 1 livraison express gratuite</p>
+<a class="btn" href="https://wa.me/22960772016?text=Je%20veux%20le%20Pack%20Premium">S'abonner</a>
+</div>
 </div>
 
+<div class="section">
+<h2>⭐ Avis Clients</h2>
+<div class="review">"Service ultra rapide !" – Étudiant UP</div>
+<div class="review">"Toujours ponctuel et professionnel." – Cliente Parakou</div>
+<div class="review">"Le meilleur service de livraison du campus." – Abonné Premium</div>
+</div>
+
+<div class="section">
 <div class="card">
 <h3>💳 Paiement Mobile Money</h3>
 <p>Paiement via MTN / Moov</p>
@@ -56,24 +79,29 @@ input {padding:8px;margin:5px;border-radius:6px;border:1px solid #ccc;}
 
 <a class="floating-btn" onclick="openAdmin()">⚙️</a>
 
+<footer>
+© 2026 Livraison Express Parakou – Mini App 4.0
+</footer>
+
 <script>
+// PWA Install
+let deferredPrompt;
+const installBtn = document.getElementById('installBtn');
+window.addEventListener('beforeinstallprompt', (e) => {
+e.preventDefault();
+deferredPrompt = e;
+installBtn.style.display = 'inline-block';
+installBtn.addEventListener('click', () => {
+installBtn.style.display = 'none';
+deferredPrompt.prompt();
+});
+});
 
-function saveOrder(){
-let name = document.getElementById("clientName").value;
-let order = document.getElementById("clientOrder").value;
-
-if(name && order){
-let orders = JSON.parse(localStorage.getItem("orders")) || [];
-orders.push({name:name,order:order});
-localStorage.setItem("orders",JSON.stringify(orders));
-alert("Commande enregistrée !");
-}
-}
-
+// Admin
 function openAdmin(){
 let password = prompt("Mot de passe admin :");
 if(password === "bello123"){
-document.getElementById("adminPanel").style.display = "block";
+document.getElementById("adminPanel").style.display="block";
 loadOrders();
 }
 }
@@ -87,10 +115,24 @@ list += "<p>"+o.name+" : "+o.order+"</p>";
 document.getElementById("ordersList").innerHTML=list;
 }
 
-function logout(){
-document.getElementById("adminPanel").style.display="none";
+function logout(){document.getElementById("adminPanel").style.display="none";}
+
+// Save Order
+function saveOrder(){
+let name = prompt("Votre nom :");
+let order = prompt("Votre commande :");
+if(name && order){
+let orders = JSON.parse(localStorage.getItem("orders")) || [];
+orders.push({name:name,order:order});
+localStorage.setItem("orders",JSON.stringify(orders));
+alert("Commande enregistrée !");
+}
 }
 
+// Register Service Worker
+if('serviceWorker' in navigator){
+navigator.serviceWorker.register('service-worker.js');
+}
 </script>
 
 </body>
