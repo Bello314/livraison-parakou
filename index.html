@@ -6,22 +6,21 @@
 <title>Livraison Express Parakou</title>
 
 <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#008000">
 
 <style>
 body {
 margin:0;
-font-family: 'Arial', sans-serif;
-background:#f7f7f7;
+font-family: Arial, sans-serif;
+background:#f2f2f2;
 }
 
 header {
 background: linear-gradient(135deg,#008000,#00c853);
 color:white;
-padding:40px 20px;
+padding:50px 20px;
 text-align:center;
 }
-
-h1 { margin:0; }
 
 .section {
 padding:30px 20px;
@@ -33,8 +32,8 @@ background:white;
 padding:20px;
 margin:15px auto;
 border-radius:15px;
-box-shadow:0 6px 15px rgba(0,0,0,0.1);
-max-width:400px;
+box-shadow:0 8px 20px rgba(0,0,0,0.1);
+max-width:420px;
 }
 
 .price {
@@ -50,8 +49,13 @@ padding:12px 20px;
 background:#25D366;
 color:white;
 text-decoration:none;
-border-radius:8px;
+border-radius:10px;
 font-weight:bold;
+}
+
+.install-btn {
+background:#000;
+margin-top:15px;
 }
 
 .floating-btn{
@@ -64,15 +68,24 @@ padding:15px;
 border-radius:50%;
 font-size:24px;
 text-decoration:none;
-box-shadow:0 4px 10px rgba(0,0,0,0.2);
+box-shadow:0 4px 12px rgba(0,0,0,0.3);
 }
 
 footer{
-background:#222;
+background:#111;
 color:white;
 text-align:center;
 padding:15px;
 font-size:13px;
+}
+
+.review {
+background:white;
+padding:15px;
+margin:10px auto;
+border-radius:10px;
+max-width:400px;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
 }
 </style>
 </head>
@@ -82,7 +95,7 @@ font-size:13px;
 <header>
 <h1>🚀 Livraison Express Parakou</h1>
 <p>Rapide • Fiable • Sécurisé</p>
-<p>À partir de 500 FCFA</p>
+<button id="installBtn" class="btn install-btn" style="display:none;">Installer l'application</button>
 </header>
 
 <div class="section">
@@ -93,7 +106,7 @@ font-size:13px;
 <div class="card">📦 Colis & documents</div>
 <div class="card">💊 Médicaments</div>
 
-<a class="btn" href="https://wa.me/22960772016?text=Bonjour%20je%20veux%20commander%20une%20livraison">
+<a class="btn" href="https://wa.me/22960772016?text=Bonjour%20je%20veux%20commander">
 Commander maintenant
 </a>
 </div>
@@ -105,30 +118,52 @@ Commander maintenant
 <h3>Pack Basic</h3>
 <p class="price">4 000 FCFA / mois</p>
 <p>10 livraisons incluses</p>
-<p>Priorité campus</p>
-<a class="btn" href="https://wa.me/22960772016?text=Bonjour%20je%20veux%20m'abonner%20au%20Pack%20Basic">
-S'abonner
-</a>
+<a class="btn" href="https://wa.me/22960772016?text=Je%20veux%20le%20Pack%20Basic">S'abonner</a>
 </div>
 
 <div class="card">
 <h3>Pack Premium</h3>
 <p class="price">8 000 FCFA / mois</p>
 <p>25 livraisons incluses</p>
-<p>Ultra priorité</p>
 <p>1 livraison express gratuite</p>
-<a class="btn" href="https://wa.me/22960772016?text=Bonjour%20je%20veux%20m'abonner%20au%20Pack%20Premium">
-S'abonner
-</a>
+<a class="btn" href="https://wa.me/22960772016?text=Je%20veux%20le%20Pack%20Premium">S'abonner</a>
 </div>
+</div>
+
+<div class="section">
+<h2>⭐ Avis Clients</h2>
+
+<div class="review">"Service ultra rapide !" – Étudiant UP</div>
+<div class="review">"Toujours ponctuel et professionnel." – Cliente Parakou</div>
+<div class="review">"Le meilleur service de livraison du campus." – Abonné Premium</div>
 
 </div>
 
 <footer>
-© 2026 Livraison Express Parakou | Mini-App 2.0
+© 2026 Livraison Express Parakou – Mini App 3.0
 </footer>
 
 <a class="floating-btn" href="https://wa.me/22960772016">📲</a>
+
+<script>
+if ('serviceWorker' in navigator) {
+navigator.serviceWorker.register('service-worker.js');
+}
+
+let deferredPrompt;
+const installBtn = document.getElementById('installBtn');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+e.preventDefault();
+deferredPrompt = e;
+installBtn.style.display = 'inline-block';
+
+installBtn.addEventListener('click', () => {
+installBtn.style.display = 'none';
+deferredPrompt.prompt();
+});
+});
+</script>
 
 </body>
 </html>
